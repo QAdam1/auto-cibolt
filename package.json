@@ -1,0 +1,34 @@
+{
+  "name": "auto-cibolt",
+  "version": "1.0.0",
+  "description": "Automation for buying wolt giftcard with cibus",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsc && node -r dotenv/config out/index.js",
+    "start": "node out/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Itay9263/auto-cibolt.git"
+  },
+  "author": "Itay Houri",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Itay9263/auto-cibolt/issues"
+  },
+  "homepage": "https://github.com/Itay9263/auto-cibolt#readme",
+  "dependencies": {
+    "nodemailer": "^6.9.1",
+    "puppeteer": "^19.7.5",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.3",
+    "@types/nodemailer": "^6.4.7",
+    "@types/puppeteer": "^7.0.4",
+    "dotenv": "^16.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
+  }
+}
