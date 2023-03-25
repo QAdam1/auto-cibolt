@@ -35,8 +35,8 @@ const scrapeWolt = async (): Promise<void> => {
         await sleep(2000)
         const clickToOrderButton = await page.waitForSelector('#mainContent > div._7jNY6.rtl > div.Ma9ZAd > div.CZxzRr > div > div.sc-aa3e1f87-0.gKHgeC > dl:nth-child(3) > div:nth-child(3) > dd > div.COs4mW > div > button', { timeout: 5000 })
         await clickToOrderButton.click()
-        await sleep(3000)
-        const cibusIframeElement = await page.waitForSelector('#mainContent > div.sc-abd810a6-0.ccSyce > iframe')
+        await sleep(5000)
+        const cibusIframeElement = await page.waitForSelector('#mainContent > div.sc-51f5ecbb-0.iepEoC > iframe')
         const cibusIframe = await cibusIframeElement.contentFrame()
 
         const [employeeIdInput, passwordInput, companyNameInput] = await Promise.all([
