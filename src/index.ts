@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import { readFile } from "fs/promises";
-import { Protocol } from 'puppeteer';
+import { ElementHandle, Protocol } from 'puppeteer';
 import { EMPLOYEE_ID, CIBUS_PASSWORD, COMPANY_NAME, RUN_INTERVAL_HOUR, COOKIE_FILE_PATH } from "./config";
 import { sendMail } from "./mailer";
 
@@ -17,10 +17,40 @@ const scrapeWolt = async (): Promise<void> => {
         const cookies: Protocol.Network.CookieParam[] = JSON.parse(await readFile(COOKIE_FILE_PATH, 'utf-8'));
         await page.setCookie(...cookies);
 
-        await page.goto('https://wolt.com/en/isr/modiin/venue/woltilgiftcards');
+        await page.goto('https://wolt.com/he/isr/tel-aviv/venue/woltilgiftcards');
+        try {
 
-        const GiftCardButton = await page.waitForSelector('#mainContent > div > div.sc-82e0570f-0.dZGtPZ > div.vJcWLX.rtl > div.E3Uywo.rtl > div.G8uDzj.E3Uywo > div > section > div:nth-child(2) > div:nth-child(7) > div > a', { timeout: 15000 })
-        await GiftCardButton.click()
+            const DontRestoreOrderButton = await page.waitForSelector('[data-test-id="restore-order-modal.reject"] [class*="cbc_Button_spinnerContainer"]', { timeout: 15000 })
+
+            await page.evaluate(() => {
+                const element = document.querySelector('[data-test-id="restore-order-modal.reject"] [class*="cbc_Button_spinnerContainer"]');
+                if (element) {
+                    // @ts-ignore
+                    element.click();  // Force clicking the element
+                }
+            });
+            await DontRestoreOrderButton.click()
+        } catch (error) {
+        }
+
+
+        await sleep(5000);
+
+        const text1 = 'גיפט קארד - 25 ';
+        const text2 = 'גיפט קארד - 30 ';
+
+        // await ((await page.waitForXPath(`(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text1}')]/ancestor::*//*[@data-test-id="ItemCardStepperContainer"])[1]/*/*`,
+        await ((await page.waitForXPath(`(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text1}')]/ancestor::*[@data-test-id="horizontal-item-card"]//*[@data-test-id="ItemCardStepperContainer"]/*/*)[last()]`,
+            { timeout: 15000 })) as ElementHandle<Element>).click()
+        await ((await page.waitForXPath(`(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text2}')]/ancestor::*[@data-test-id="horizontal-item-card"]//*[@data-test-id="ItemCardStepperContainer"]/*/*)[last()]`,
+            { timeout: 15000 })) as ElementHandle<Element>).click()
+
+        // const GiftCardButton25 = await page.waitForXPath(`(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text1}')]/ancestor::*//*[@data-test-id="ItemCardStepperContainer"])[1]/*/*`, { timeout: 15000 })
+        // const elementHandle = GiftCardButton25 as ElementHandle<Element>
+        // await elementHandle.click()
+        // const GiftCardButton30 = await page.waitForXPath(`(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text2}')]/ancestor::*//*[@data-test-id="ItemCardStepperContainer"])[2]/*/*`, { timeout: 15000 })
+        // const elementHandle2 = GiftCardButton30 as ElementHandle<Element>
+        // await elementHandle2.click()
         const addToOrderButton = await page.waitForSelector('body > div.sc-75cea620-0.klDnoY.rtl > div > aside > footer > div > div > div > div.sc-e0dc78c3-2.jVipoH > button', { timeout: 5000 })
         await addToOrderButton.click()
         await sleep(1000)
