@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsc && node -r dotenv/config out/index.js",
     "start": "node out/index.js",
-    "ci": "npx playwright install && npm run dev"
+    "ci": "npx playwright install webkit && npm run dev"
   },
   "repository": {
     "type": "git",

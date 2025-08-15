@@ -2,7 +2,7 @@ import { webkit, Browser, Page, ElementHandle } from 'playwright';
 import { readFile } from "fs/promises";
 import { EMPLOYEE_MAIL, CIBUS_PASSWORD, CIBUS_COMPANY_NAME, RUN_INTERVAL_HOUR, COOKIE_FILE_PATH } from "./config";
 import {getLatestGiftCardsFromMail, getLatestSmsCodeFromMail, sendMail} from "./mailer";
-import {chromium, expect} from "@playwright/test";
+import {expect} from "@playwright/test";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
