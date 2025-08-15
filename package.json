@@ -1,34 +1,45 @@
 {
   "name": "auto-cibolt",
   "version": "1.0.0",
-  "description": "Automation for buying wolt giftcard with cibus",
+  "description": "Automation for buying wolt giftcard with cibus AND redeeming their codes",
   "main": "index.js",
   "scripts": {
     "dev": "tsc && node -r dotenv/config out/index.js",
-    "start": "node out/index.js"
+    "start": "node out/index.js",
+    "ci": "npx playwright install && npm run dev"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Itay9263/auto-cibolt.git"
+    "url": "git+ssh://git@github.com/QAdam1/auto-cibolt.git"
   },
-  "author": "Itay Houri",
+  "author": "QAdam",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Itay9263/auto-cibolt/issues"
+    "url": "https://github.com/QAdam1/auto-cibolt/issues"
   },
-  "homepage": "https://github.com/Itay9263/auto-cibolt#readme",
+  "homepage": "https://github.com/QAdam1/auto-cibolt#readme",
   "dependencies": {
+    "imap": "^0.8.19",
+    "imap-simple": "^5.1.0",
+    "mailparser": "^3.7.4",
     "nodemailer": "^6.9.1",
+    "pdf-parse": "^1.1.1",
+    "playwright": "^1.51.1",
     "puppeteer": "^19.7.5",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
   "devDependencies": {
-    "@types/node": "^18.15.3",
+    "@playwright/test": "^1.51.1",
+    "@types/imap": "^0.8.42",
+    "@types/imap-simple": "^4.2.10",
+    "@types/mailparser": "^3.4.6",
+    "@types/node": "^22.14.0",
     "@types/nodemailer": "^6.4.7",
+    "@types/pdf-parse": "^1.1.5",
     "@types/puppeteer": "^7.0.4",
     "dotenv": "^16.0.3",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.2"
+    "typescript": "^5.8.3"
   }
 }

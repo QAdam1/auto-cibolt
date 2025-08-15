@@ -1,97 +1,228 @@
-import puppeteer from 'puppeteer-extra'
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
+import { webkit, Browser, Page, ElementHandle } from 'playwright';
 import { readFile } from "fs/promises";
-import { ElementHandle, Protocol } from 'puppeteer';
-import { EMPLOYEE_ID, CIBUS_PASSWORD, COMPANY_NAME, RUN_INTERVAL_HOUR, COOKIE_FILE_PATH } from "./config";
-import { sendMail } from "./mailer";
+import { EMPLOYEE_MAIL, CIBUS_PASSWORD, CIBUS_COMPANY_NAME, RUN_INTERVAL_HOUR, COOKIE_FILE_PATH } from "./config";
+import {getLatestGiftCardsFromMail, getLatestSmsCodeFromMail, sendMail} from "./mailer";
+import {chromium, expect} from "@playwright/test";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-
 const scrapeWolt = async (): Promise<void> => {
+    let browser: Browser | null = null;
     try {
-        puppeteer.use(StealthPlugin())
-        const browser = await puppeteer.launch({ headless: false, args: ['--disable-features=site-per-process'] });
-        const page = await browser.newPage()
+        browser = await webkit.launch({ headless: false });
+        const context = await browser.newContext();
+        const page = await context.newPage();
 
-        const cookies: Protocol.Network.CookieParam[] = JSON.parse(await readFile(COOKIE_FILE_PATH, 'utf-8'));
-        await page.setCookie(...cookies);
+        // Read and format cookies
+        const rawCookies = JSON.parse(await readFile(COOKIE_FILE_PATH, 'utf-8'));
+        const formattedCookies = rawCookies.map((cookie: any) => ({
+            ...cookie,
+            sameSite: 'Lax' // Force sameSite to 'Lax' for all cookies
+        }));
+        await context.addCookies(formattedCookies);
 
-        await page.goto('https://wolt.com/he/isr/tel-aviv/venue/woltilgiftcards');
-        try {
+        // Add logging for debugging
+        console.log('Starting navigation to Wolt...');
+        await page.goto('https://wolt.com/he/isr/tel-aviv/venue/woltilgiftcards', {
+            waitUntil: 'domcontentloaded',
+            timeout: 60000
+        });
+        console.log('Page loaded successfully');
 
-            const DontRestoreOrderButton = await page.waitForSelector('[data-test-id="restore-order-modal.reject"] [class*="cbc_Button_spinnerContainer"]', { timeout: 15000 })
+        await page.screenshot({ path: `screenshots/redeemCode/1.png` });
 
-            await page.evaluate(() => {
-                const element = document.querySelector('[data-test-id="restore-order-modal.reject"] [class*="cbc_Button_spinnerContainer"]');
-                if (element) {
-                    // @ts-ignore
-                    element.click();  // Force clicking the element
-                }
-            });
-            await DontRestoreOrderButton.click()
-        } catch (error) {
+
+        // Debug page content
+        const pageContent = await page.content();
+        console.log('Page title:', await page.title());
+        console.log('Page URL:', page.url());
+
+        // Take screenshot after page load
+        await page.screenshot({ path: 'screenshots/initial-page.png' });
+
+        // Wait for a shorter time for the page to stabilize
+        await sleep(5000);
+
+        // Check if we're on the right page
+        const isOnGiftCardPage = await page.evaluate(() => {
+            return document.body.textContent?.includes('גיפט קארד') || false;
+        });
+
+        if (!isOnGiftCardPage) {
+            console.error('Not on gift card page! Current page content:', await page.content());
+            await page.screenshot({ path: 'screenshots/wrong-page.png' });
+            throw new Error('Not on gift card page');
         }
 
+        try {
+            console.log('Checking for restore order modal...');
+            // Try multiple selectors for the restore order modal
+            const dontRestoreOrderButton = await page.waitForSelector('[data-test-id="restore-order-modal.reject"] [class*="cbc_Button_spinnerContainer"]', { timeout: 5000 })
+                .catch(() => page.waitForSelector('button:has-text("Don\'t restore")', { timeout: 5000 }))
+                .catch(() => page.waitForSelector('[data-test-id="restore-order-modal.reject"]', { timeout: 5000 }));
 
-        await sleep(5000);
+            if (dontRestoreOrderButton) {
+                await dontRestoreOrderButton.click();
+                console.log('Clicked restore order modal');
+            } else {
+                console.log('No restore order modal found, continuing...');
+            }
+        } catch (error) {
+            console.log('No restore order modal found, continuing...');
+        }
+
+        // Wait for page to stabilize
+        await sleep(3000);
+
+        console.log('Starting gift card selection...');
+
+        // Take screenshot before gift card selection
+        await page.screenshot({ path: 'screenshots/before-gift-card-selection.png' });
 
         const text1 = 'גיפט קארד - 25 ';
         const text2 = 'גיפט קארד - 30 ';
 
-        // await ((await page.waitForXPath(`(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text1}')]/ancestor::*//*[@data-test-id="ItemCardStepperContainer"])[1]/*/*`,
-        await ((await page.waitForXPath(`(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text1}')]/ancestor::*[@data-test-id="horizontal-item-card"]//*[@data-test-id="ItemCardStepperContainer"]/*/*)[last()]`,
-            { timeout: 15000 })) as ElementHandle<Element>).click()
-        await ((await page.waitForXPath(`(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text2}')]/ancestor::*[@data-test-id="horizontal-item-card"]//*[@data-test-id="ItemCardStepperContainer"]/*/*)[last()]`,
-            { timeout: 15000 })) as ElementHandle<Element>).click()
+        try {
+            console.log('Looking for 25 NIS gift card...');
+            // Try multiple selectors for the gift card
+            const giftCard25 = await page.waitForSelector(`xpath=(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text1}')]/ancestor::*[@data-test-id="horizontal-item-card"]//*[@data-test-id="ItemCardStepperContainer"]/*/*)[last()]`, { timeout: 10000 })
+                .catch(() => page.waitForSelector(`button:has-text("${text1}")`, { timeout: 10000 }));
 
-        // const GiftCardButton25 = await page.waitForXPath(`(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text1}')]/ancestor::*//*[@data-test-id="ItemCardStepperContainer"])[1]/*/*`, { timeout: 15000 })
-        // const elementHandle = GiftCardButton25 as ElementHandle<Element>
-        // await elementHandle.click()
-        // const GiftCardButton30 = await page.waitForXPath(`(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text2}')]/ancestor::*//*[@data-test-id="ItemCardStepperContainer"])[2]/*/*`, { timeout: 15000 })
-        // const elementHandle2 = GiftCardButton30 as ElementHandle<Element>
-        // await elementHandle2.click()
-        const addToOrderButton = await page.waitForSelector('body > div.sc-75cea620-0.klDnoY.rtl > div > aside > footer > div > div > div > div.sc-e0dc78c3-2.jVipoH > button', { timeout: 5000 })
-        await addToOrderButton.click()
-        await sleep(1000)
-        const viewOrderButton = await page.waitForSelector('#mainContent > div > div.neKplL.vOSS4d.WFldf4 > div > div.AMg3We > div > div', { timeout: 10000 })
-        await viewOrderButton.click()
-        const checkoutButton = await page.waitForSelector('body > div.sc-75cea620-0.klDnoY.rtl > div > aside > footer > div > div > button', { timeout: 5000 })
-        await checkoutButton.click()
-        const changePaymentMethodButton = await page.waitForSelector('#mainContent > div._7jNY6.rtl > div.Ma9ZAd > div:nth-child(1) > ul.sc-bb657320-1.joEtjd > li > a', { timeout: 5000 })
-        await changePaymentMethodButton.click()
-        const chooseCibusButton = await page.waitForSelector('body > div.sc-75cea620-0.klDnoY.rtl > div > aside > div.sc-c12b36a1-0.cGazFG > div > div.sc-c12b36a1-5.hNAlWg > div > div:nth-child(6) > button', { timeout: 5000 })
-        await chooseCibusButton.click()
-        await sleep(2000)
-        const clickToOrderButton = await page.waitForSelector('#mainContent > div._7jNY6.rtl > div.Ma9ZAd > div.CZxzRr > div > div.sc-aa3e1f87-0.gKHgeC > dl:nth-child(3) > div:nth-child(3) > dd > div.COs4mW > div > button', { timeout: 5000 })
-        await clickToOrderButton.click()
-        await sleep(5000)
-        const cibusIframeElement = await page.waitForSelector('#mainContent > div.sc-51f5ecbb-0.iepEoC > iframe')
-        const cibusIframe = await cibusIframeElement.contentFrame()
+            if (!giftCard25) {
+                throw new Error('Could not find 25 NIS gift card');
+            }
 
-        const [employeeIdInput, passwordInput, companyNameInput] = await Promise.all([
-            cibusIframe.waitForSelector('#txtUserName'),
-            cibusIframe.waitForSelector('#txtPassword'),
-            cibusIframe.waitForSelector('#txtCompany')
-        ])
-        await employeeIdInput.type(EMPLOYEE_ID, { delay: 200 })
-        await passwordInput.type(CIBUS_PASSWORD, { delay: 200 })
-        await companyNameInput.type(COMPANY_NAME, { delay: 200 })
-        const loginButton = await cibusIframe.waitForSelector('#btnSubmit')
-        await loginButton.click()
-        const approvePayButton = await cibusIframe.waitForSelector('#btnPay')
-        await approvePayButton.click()
-        await sleep(3000)
-        const alreadyUsedModal = await page.$('body > div.sc-75cea620-0.klDnoY.rtl > div')
-        const outputMessage = alreadyUsedModal ? 'Already used cibus today' : 'Got giftcard successfully'
-        await sendMail(outputMessage)
-        await sleep(2000)
-        await browser.close()
+            await giftCard25.click();
+            console.log('Selected 25 NIS gift card');
+
+            // Take screenshot after first gift card selection
+            await page.screenshot({ path: 'screenshots/after-first-gift-card.png' });
+
+            console.log('Looking for 30 NIS gift card...');
+            const giftCard30 = await page.waitForSelector(`xpath=(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text2}')]/ancestor::*[@data-test-id="horizontal-item-card"]//*[@data-test-id="ItemCardStepperContainer"]/*/*)[last()]`, { timeout: 10000 })
+                .catch(() => page.waitForSelector(`button:has-text("${text2}")`, { timeout: 10000 }));
+
+            if (!giftCard30) {
+                throw new Error('Could not find 30 NIS gift card');
+            }
+
+            await giftCard30.click();
+            console.log('Selected 30 NIS gift card');
+
+            // Take screenshot after second gift card selection
+            await page.screenshot({ path: 'screenshots/after-second-gift-card.png' });
+        } catch (error) {
+            console.error('Error during gift card selection:', error);
+            await page.screenshot({ path: 'screenshots/error-gift-card-selection.png' });
+            throw error;
+        }
+
+        try {
+            console.log('Adding to order...');
+
+            // Take screenshot before looking for add to order button
+            await page.screenshot({ path: 'screenshots/before-add-to-order.png' });
+
+            console.log("Waiting for 'Show order' button...");
+            const showOrderButton = await page.locator('(//*[text()="הצגת פריטים"])[last()]');
+            console.log("'Add to Order' button found. Clicking...");
+            await showOrderButton.evaluate((el: HTMLElement) => el.click());
+            console.log("'Add to Order' button clicked.");
+
+            console.log("Waiting for 'Checkout' button...");
+            const checkoutButton = await page.waitForSelector('(//*[text()="מעבר לתשלום"])[last()]', { timeout: 5000 });
+            console.log("'Checkout' button found. Clicking...");
+            await checkoutButton.click();
+
+            console.log('Changing payment method...');
+            const changePaymentMethodButton =  page.locator('[data-test-id="PaymentMethods.SelectedPaymentMethod"]');
+            changePaymentMethodButton.click();
+
+            console.log('Selecting Cibus payment...');
+            const chooseCibusButton = page.locator('[data-payment-method-id="cibus"]');
+            await chooseCibusButton.click();
+            console.log('Selected Cibus payment');
+
+            await sleep(2000);
+            const selectedPaymentMethod = await changePaymentMethodButton.textContent();
+            expect(selectedPaymentMethod).toEqual('Cibusיחויב בסכום של ‏55.00 ‏₪')
+
+            console.log('Sending order...');
+            const clickToOrderButton = page.locator('[data-test-id="SendOrderButton"]');
+            await clickToOrderButton.click();
+            console.log('Clicked Send order button');
+
+            await sleep(5000);
+
+            console.log('Handling Cibus iframe...');
+            const cibusFrame = page.locator('iframe[name="cibus-challenge"]').contentFrame();
+
+            console.log('Filling Cibus credentials...');
+            const since = new Date();
+            await cibusFrame.locator('#txtUserName').fill(EMPLOYEE_MAIL);
+            await cibusFrame.locator('#txtPassword').fill(CIBUS_PASSWORD);
+            if (await cibusFrame.locator('#txtCompany').isVisible()) await cibusFrame.locator('#txtCompany').fill(CIBUS_COMPANY_NAME);
+            console.log('Filled Cibus credentials');
+
+            console.log('Submitting Cibus form...');
+            await cibusFrame.locator('#btnSubmit').click();
+            console.log('Submitted Cibus form');
+            console.log('Filling email verification code...');
+            await cibusFrame.locator('#txtOTP').waitFor({state: 'visible', timeout: 5000});
+            console.log('Getting email verification code...');
+            const code = await getLatestSmsCodeFromMail(since);
+            console.log('Got email verification code');
+            await cibusFrame.locator('#txtOTP').fill(code);
+            console.log('Filled email verification code');
+            console.log('Submitting Cibus form...');
+            await cibusFrame.locator('#btnSubmit').click();
+            console.log('Submitted Cibus form');
+
+
+            const txtWillPayFromCard = await cibusFrame.locator('#hTitleOTL').textContent();
+            if (txtWillPayFromCard === '(הסכום שיחוייב בכרטיס האשראי שלך :0  ש"ח)') {
+                await cibusFrame.locator('#btnPay').click();
+                console.log('Submitted Cibus payment');
+            } else {
+                console.log('Cibus payment failed, because the payment will use the credit card');
+                throw new Error('Cibus payment failed, because the payment will use the credit card');
+            }
+            await sleep(3000);
+            console.log('Checking for completion...');
+            const alreadyUsedModal = await page.locator('body > div.sc-75cea620-0.klDnoY.rtl > div').isVisible();
+            const outputMessage = alreadyUsedModal ? 'Already used cibus today' : 'Got giftcard successfully';
+            console.log(`Operation result: ${outputMessage}`);
+            await sleep(2000);
+        } catch (error) {
+            console.error('Error during checkout:', error);
+            await page.screenshot({ path: 'screenshots/error-checkout.png' });
+            throw error;
+        }
+
+        const codes = await getLatestGiftCardsFromMail();
+        for (let i = 0; i < codes.length; i++) {
+            await page.goto('https://wolt.com/he/me/redeem-code')
+            await page.waitForSelector('[data-test-id="redeem-code-input"]');
+            await page.locator('[data-test-id="redeem-code-input"]').fill(codes[i])
+            await page.locator('button[data-localization-key="user.redeem"]').click()
+            await sleep(2000);
+            await page.screenshot({ path: `screenshots/redeemCode/${i}.png` });
+        }
+
+        await sendMail('✅ [cibolt] Successfully  collected giftcard', 'screenshots/');
+
     } catch (err) {
-        console.log(`Error collecting giftcard: ${err}`);
+        console.error('Error details:', err);
+        await sendMail(`❌ [cibolt] Error collecting giftcard: ${err}`, 'screenshots/');
     } finally {
-        setTimeout(scrapeWolt, 1000 * 60 * 60 * RUN_INTERVAL_HOUR)
+            if (browser) {
+            console.log('Closing browser...');
+            await browser.close();
+            console.log('Browser closed');
+        }
+        // console.log(`Scheduling next run in ${RUN_INTERVAL_HOUR} hours...`);
+        // setTimeout(scrapeWolt, 1000 * 60 * 60 * RUN_INTERVAL_HOUR);
     }
 }
 
-scrapeWolt()
+scrapeWolt();
