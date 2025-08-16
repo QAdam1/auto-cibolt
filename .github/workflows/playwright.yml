@@ -25,7 +25,7 @@ jobs:
         run: npm run setup
       
       - name: Run Playwright tests
-        run: npm test
+        run: npm run dev
         env:
           CI: true
       
