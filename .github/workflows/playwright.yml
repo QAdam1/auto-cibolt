@@ -21,9 +21,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install WebKit + deps (exactly for this project’s Playwright)
-        run: |
-          sudo npx playwright install --with-deps webkit
+      - name: Install WebKit 2140
+        run: sudo npx --no-install playwright install --with-deps webkit
       
       - name: Run Playwright tests
         run: npm run dev
