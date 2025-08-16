@@ -1,0 +1,6 @@
+2025/08/16-15:09:06.468 3578 Reusing MANIFEST C:\Users\adamu\Documents\AllGitProjects\auto-cibolt\.playwright-profile\Default\Local Storage\leveldb/MANIFEST-000001
+2025/08/16-15:09:06.497 3578 Recovering log #3
+2025/08/16-15:09:06.503 3578 Reusing old log C:\Users\adamu\Documents\AllGitProjects\auto-cibolt\.playwright-profile\Default\Local Storage\leveldb/000003.log 
+2025/08/16-15:17:07.588 4f6c Level-0 table #5: started
+2025/08/16-15:17:07.635 4f6c Level-0 table #5: 16119 bytes OK
+2025/08/16-15:17:07.642 4f6c Delete type=0 #3

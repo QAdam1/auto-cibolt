@@ -1,0 +1,13 @@
+2025/08/16-15:23:04.128 2b14 Reusing MANIFEST C:\Users\adamu\Documents\AllGitProjects\auto-cibolt\.playwright-profile\Default\IndexedDB\https_wolt.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/08/16-15:23:04.129 2b14 Recovering log #7
+2025/08/16-15:23:04.129 2b14 Reusing old log C:\Users\adamu\Documents\AllGitProjects\auto-cibolt\.playwright-profile\Default\IndexedDB\https_wolt.com_0.indexeddb.leveldb/000007.log 
+2025/08/16-15:23:04.602 51b0 Level-0 table #11: started
+2025/08/16-15:23:04.828 51b0 Level-0 table #11: 1328 bytes OK
+2025/08/16-15:23:04.885 51b0 Delete type=0 #7
+2025/08/16-15:23:04.889 2b14 Manual compaction at level-0 from '\x00\x03\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x04\x00\x00\x00' @ 0 : 0; will stop at '\x00\x03\x01\x03\x03\x00\x00\x00\x00\x00\x00\xf0?' @ 221 : 1
+2025/08/16-15:23:04.891 2b14 Compacting 1@0 + 1@1 files
+2025/08/16-15:23:04.936 2b14 Generated table #12@0: 28 keys, 645 bytes
+2025/08/16-15:23:04.936 2b14 Compacted 1@0 + 1@1 files => 645 bytes
+2025/08/16-15:23:05.024 2b14 compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/08/16-15:23:05.025 2b14 Delete type=2 #11
+2025/08/16-15:23:05.030 3a3c Manual compaction at level-0 from '\x00\x03\x01\x03\x03\x00\x00\x00\x00\x00\x00\xf0?' @ 221 : 1 .. '\x00\x04\x00\x00\x00' @ 0 : 0; will stop at (end)
