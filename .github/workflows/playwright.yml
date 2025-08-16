@@ -23,7 +23,7 @@ jobs:
 
       - name: Install WebKit + deps (exactly for this project’s Playwright)
         run: |
-          npx playwright install --with-deps webkit
+          sudo npx playwright install --with-deps webkit
       
       - name: Run Playwright tests
         run: npm run dev
