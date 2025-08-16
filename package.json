@@ -8,7 +8,7 @@
     "start": "node out/index.js",
     "ci": "npx playwright install webkit && npm run dev",
     "setup": "npx playwright install",
-    "steup:deps": "npx playwright install --with-deps"
+    "setup:deps": "sudo npx playwright install --with-deps"
   },
   "repository": {
     "type": "git",
