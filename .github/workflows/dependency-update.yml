@@ -1,0 +1,75 @@
+name: Dependency Update
+
+on:
+  workflow_dispatch: # Allow manual trigger
+  repository_dispatch: # Allow webhook triggers
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    environment: env
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npm run setup
+
+      - name: Check for outdated dependencies
+        id: check-updates
+        run: |
+          npx npm-check-updates --target minor --format json > updates.json
+          if [ -s updates.json ]; then
+            echo "updates_available=true" >> $GITHUB_OUTPUT
+            echo "update_count=$(jq length updates.json)" >> $GITHUB_OUTPUT
+          else
+            echo "updates_available=false" >> $GITHUB_OUTPUT
+            echo "update_count=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Test current setup
+        run: npm run dev
+        env:
+          CI: true
+          NODE_ENV: test
+
+      - name: Create Pull Request
+        if: steps.check-updates.outputs.updates_available == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update dependencies'
+          title: '🤖 Automated dependency updates'
+          body: |
+            ## Automated Dependency Updates
+            
+            This PR updates ${{ steps.check-updates.outputs.update_count }} outdated dependencies.
+            
+            ### What's Changed
+            - Automated dependency updates via GitHub Actions
+            - Updates are limited to minor and patch versions for stability
+            
+            ### Testing
+            - [ ] All tests pass
+            - [ ] No breaking changes introduced
+            - [ ] Development script runs successfully
+            
+            ### Notes
+            - Review the changes carefully before merging
+            - Consider running the application locally to test functionality
+            - The workflow verified that the current setup works before creating this PR
+          branch: dependency-updates
+          delete-branch: true
+          labels: |
+            dependencies
+            automated
+            maintenance 
