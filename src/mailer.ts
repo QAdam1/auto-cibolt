@@ -2,12 +2,14 @@ import fs from 'fs';
 import path from 'path';
 import {simpleParser} from "mailparser";
 import pdfParse from 'pdf-parse';
-import mailer from "nodemailer";
-import imaps, {ImapSimple} from 'imap-simple';
+import mailer, {Transporter} from "nodemailer";
+import imaps, {ImapSimple, ImapSimpleOptions} from 'imap-simple';
 import {FetchOptions} from "imap";
 import {MAIL_PROVIDER, MAIL_USER, MAIL_PASSWORD, TO_MAIL} from "./config";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
+import {waitUntil} from "./utils";
 
-const transporter = mailer.createTransport({
+const smtpTransportOptions: SMTPTransport.Options = {
     host: `smtp.${MAIL_PROVIDER}.com`,
     port: 587,
     secure: false, // true for 465, false for other ports
@@ -15,7 +17,19 @@ const transporter = mailer.createTransport({
         user: MAIL_USER,
         pass: MAIL_PASSWORD
     }
-});
+};
+
+const imapSimpleOptions: ImapSimpleOptions = {
+    imap: {
+        user: process.env.MAIL_USER as string,
+        password: process.env.MAIL_PASSWORD as string,
+        host: `imap.${process.env.MAIL_PROVIDER}.com`,
+        port: 993,
+        tls: true,
+        authTimeout: 5000,
+        tlsOptions: {rejectUnauthorized: false}
+    }
+}
 
 const messageOptions: mailer.SendMailOptions = {
     from: MAIL_USER,
@@ -42,7 +56,9 @@ function _getAllFiles(dirPath: string): string[] {
 }
 
 export const sendMail = async (text: string, folderPath?: string): Promise<void> => {
+    let transporter: Transporter;
     try {
+        transporter = mailer.createTransport(smtpTransportOptions);
         let attachments: any[] = [];
 
         if (folderPath) {
@@ -67,73 +83,79 @@ export const sendMail = async (text: string, folderPath?: string): Promise<void>
         console.log('Email sent successfully');
     } catch (error) {
         console.error('Failed to send email:', error);
+    } finally {
+        if (transporter) transporter.close();
     }
 };
 
-export const getMail = async (searchObj: any = {}): Promise<any> => {
-    const subject = searchObj.subject || 'Wolt';
-    const days = searchObj.days || 1;
-    const query = `subject:"${subject}" in:inbox has:attachment newer_than:${days}d`;
-
-    let connection: ImapSimple;
+export const getMail = async (query: string, since: Date): Promise<any> => {
+    let imapSimple: ImapSimple;
     try {
-        connection = await imaps.connect({
-            imap: {
-                user: process.env.MAIL_USER as string,
-                password: process.env.MAIL_PASSWORD as string,
-                host: `imap.${process.env.MAIL_PROVIDER}.com`,
-                port: 993,
-                tls: true,
-                authTimeout: 5000,
-                tlsOptions: {rejectUnauthorized: false}
-            }
-        });
-
-        await connection.openBox('[Gmail]/All Mail'); // for Gmail; else use 'INBOX'
-
+        imapSimple = await imaps.connect(imapSimpleOptions);
+        await imapSimple.openBox('[Gmail]/All Mail'); // for Gmail; else use 'INBOX'
         const searchCriteria: any = [['X-GM-RAW', query]];
         const fetchOptions: FetchOptions = {bodies: [''], struct: true};
 
-        const messages: any[] = await connection.search(searchCriteria, fetchOptions);
-        if (!messages.length) return null;
+        let messages: any[] = null;
+        await waitUntil(async () => {
+                messages = await imapSimple.search(searchCriteria, fetchOptions);
+                if (!messages.length) return false;
 
-        for (let i = messages.length - 1; i >= 0; i--) {
-            const all = messages[i].parts.find((p: any) => p.which === '');
-            if (!all) continue;
+                messages = messages.filter(message => {
+                    const messageDate = message.attributes.date as Date | undefined;
+                    return messageDate ? messageDate.getTime() > since.getTime() : false;
+                });
 
-            const parsed: any = await simpleParser(all.body);
+                return messages.length > 0;
+            },
+            {timeout: 120_000, interval: 1500, timeoutMsg: `Latest gmail was not found for query: ${query}`}
+        )
 
-            const pdf: any = (parsed.attachments || []).find((a: any) =>
-                (a.contentType || '').toLowerCase().includes('application/pdf') ||
-                (a.filename || '').toLowerCase().endsWith('.pdf')
-            );
+        if (query.toLowerCase().includes('sms')) {
+            const message = messages[messages.length - 1].parts.find((p: any) => p.which === '');
+            const parsed: any = await simpleParser(message.body);
+            return parsed;
 
-            if (pdf) {
-                return {parsed, pdf};
+        } else {
+            for (let i = messages.length - 1; i >= 0; i--) {
+                const all = messages[i].parts.find((p: any) => p.which === '');
+                if (!all) continue;
+
+                const parsed: any = await simpleParser(all.body);
+
+                const pdf: any = (parsed.attachments || []).find((a: any) =>
+                    (a.contentType || '').toLowerCase().includes('application/pdf') ||
+                    (a.filename || '').toLowerCase().endsWith('.pdf')
+                );
+
+                if (pdf) {
+                    return {parsed, pdf};
+                }
             }
         }
-
         return null;
     } catch (e) {
         console.error(`Error in getMail:`, e);
         return null;
     } finally {
-        if (connection) connection.end();
+        if (imapSimple) imapSimple.end();
     }
 };
 
 export const getLatestSmsCodeFromMail = async (since: Date) => {
-    const parsedMail: any = await getMail({subject: 'SMS code received', sentSince: since});
+    const gmailDate = since.toISOString().slice(0, 10).replace(/-/g, "/");
+    const query = `subject:"SMS code received" in:inbox after:${gmailDate}`;
+    let parsedMail: any = await getMail(query, since);
     const code = parsedMail.text?.trim().split('#')[1]
     console.log(`retrieved SMS code:\n${code}`);
 
     return code;
 }
 
-export const getLatestGiftCardsFromMail = async () => {
-    const mailData: any = await getMail({
-        subject: 'הגיפט קארד של Wolt הגיע ומחכה לשליחה :)‬'
-    });
+export const getLatestGiftCardsFromMail = async (since: Date) => {
+    const gmailDate = since.toISOString().slice(0, 10).replace(/-/g, "/");
+    const query = `subject:"הגיפט קארד של Wolt הגיע ומחכה לשליחה :)‬" in:inbox has:attachment after:${gmailDate}`;
+    const mailData: any = await getMail(query, since);
     if (!mailData?.parsed?.attachments?.length) {
         console.log('No attachments found.');
         return [];

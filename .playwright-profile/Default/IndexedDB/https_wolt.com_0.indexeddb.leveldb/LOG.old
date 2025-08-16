@@ -1,7 +1,0 @@
-2025/08/16-15:09:18.033 2d60 Reusing MANIFEST C:\Users\adamu\Documents\AllGitProjects\auto-cibolt\.playwright-profile\Default\IndexedDB\https_wolt.com_0.indexeddb.leveldb/MANIFEST-000001
-2025/08/16-15:09:18.034 2d60 Recovering log #4
-2025/08/16-15:09:18.035 2d60 Reusing old log C:\Users\adamu\Documents\AllGitProjects\auto-cibolt\.playwright-profile\Default\IndexedDB\https_wolt.com_0.indexeddb.leveldb/000004.log 
-2025/08/16-15:09:20.415 1218 Level-0 table #8: started
-2025/08/16-15:09:20.448 1218 Level-0 table #8: 1360 bytes OK
-2025/08/16-15:09:20.451 1218 Delete type=0 #4
-2025/08/16-15:09:20.451 1218 Manual compaction at level-0 from '\x00\x02\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x03\x00\x00\x00' @ 0 : 0; will stop at (end)

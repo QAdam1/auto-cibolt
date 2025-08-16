@@ -4,7 +4,7 @@
   "description": "Automation for buying wolt giftcard with cibus AND redeeming their codes",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc && node -r dotenv/config out/index.js",
+    "dev": "dotenv -e .env -- tsx src/index.ts",
     "start": "node out/index.js",
     "ci": "npx playwright install webkit && npm run dev",
     "setup": "npx playwright install webkit"
@@ -40,7 +40,9 @@
     "@types/pdf-parse": "^1.1.5",
     "@types/puppeteer": "^7.0.4",
     "dotenv": "^16.0.3",
+    "dotenv-cli": "^10.0.0",
     "ts-node": "^10.9.1",
+    "tsx": "^4.20.4",
     "typescript": "^5.8.3"
   }
 }
