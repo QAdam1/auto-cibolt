@@ -7,8 +7,7 @@
     "dev": "dotenv -e .env -- tsx src/index.ts",
     "start": "node out/index.js",
     "ci": "npm run setup:deps && npm run dev",
-    "setup": "npx --no-install playwright install webkit",
-    "setup:deps": "if command -v apt-get >/dev/null 2>&1; then sudo npx --no-install playwright install --with-deps webkit; else npx --no-install playwright install webkit; fi"
+    "setup": "npx --no-install playwright install webkit"
   },
   "repository": {
     "type": "git",
