@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "dotenv -e .env -- tsx src/index.ts",
     "start": "node out/index.js",
-    "ci": "npx playwright install webkit && npm run dev",
-    "setup": "npx playwright install",
+    "ci": "sudo npm run setup && sudo npm run setup:deps && npm run dev",
+    "setup": "sudo npx playwright install",
     "setup:deps": "sudo npx playwright install --with-deps"
   },
   "repository": {
