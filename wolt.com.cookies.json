@@ -14,7 +14,7 @@
   },
   {
     "domain": ".wolt.com",
-    "expirationDate": 1789892363.929784,
+    "expirationDate": 1789901879.067815,
     "hostOnly": false,
     "httpOnly": false,
     "name": "_ga",
@@ -27,7 +27,7 @@
   },
   {
     "domain": ".wolt.com",
-    "expirationDate": 1778662367,
+    "expirationDate": 1778671883,
     "hostOnly": false,
     "httpOnly": false,
     "name": "intercom-device-id-qwum5ehb",
@@ -66,7 +66,7 @@
   },
   {
     "domain": ".wolt.com",
-    "expirationDate": 1786872722,
+    "expirationDate": 1786877885,
     "hostOnly": false,
     "httpOnly": false,
     "name": "ravelinDeviceId",
@@ -79,7 +79,7 @@
   },
   {
     "domain": ".wolt.com",
-    "expirationDate": 1789892369.791792,
+    "expirationDate": 1789901884.776802,
     "hostOnly": false,
     "httpOnly": false,
     "name": "rskxRunCookie",
@@ -92,7 +92,7 @@
   },
   {
     "domain": ".wolt.com",
-    "expirationDate": 1789892370.703587,
+    "expirationDate": 1789901885.817302,
     "hostOnly": false,
     "httpOnly": false,
     "name": "rCookie",
@@ -118,7 +118,7 @@
   },
   {
     "domain": "wolt.com",
-    "expirationDate": 1786868362,
+    "expirationDate": 1786877876,
     "hostOnly": true,
     "httpOnly": false,
     "name": "activeLocation",
@@ -157,7 +157,7 @@
   },
   {
     "domain": ".wolt.com",
-    "expirationDate": 1763111447,
+    "expirationDate": 1763117880,
     "hostOnly": false,
     "httpOnly": false,
     "name": "_fbp",
@@ -194,60 +194,8 @@
     "value": "19s4dd%7C2%7Cfyi%7C0%7C1827"
   },
   {
-    "domain": ".wolt.com",
-    "expirationDate": 1755418764,
-    "hostOnly": false,
-    "httpOnly": false,
-    "name": "_uetsid",
-    "path": "/",
-    "sameSite": "unspecified",
-    "secure": false,
-    "session": false,
-    "storeId": "0",
-    "value": "98aebc3079b811f0a1772b7809174522"
-  },
-  {
-    "domain": ".wolt.com",
-    "expirationDate": 1789028364,
-    "hostOnly": false,
-    "httpOnly": false,
-    "name": "_uetvid",
-    "path": "/",
-    "sameSite": "unspecified",
-    "secure": false,
-    "session": false,
-    "storeId": "0",
-    "value": "b1e18bf0f5c711ef93dddbe07c48aed1"
-  },
-  {
-    "domain": ".wolt.com",
-    "expirationDate": 1755937167,
-    "hostOnly": false,
-    "httpOnly": false,
-    "name": "intercom-session-qwum5ehb",
-    "path": "/",
-    "sameSite": "lax",
-    "secure": false,
-    "session": false,
-    "storeId": "0",
-    "value": "Qks1NGdsbHRJM2h4MXA5Uy9mUi9DZWhLNGROc1dmRmJyaG8zTlBjY0loNHhrNU0wSWhUOFp6QjB6dkJvalBmR3JVa1dMV1JXQjJEMFlmRUFYU21vRCtnbnlGejZBNXJwSGRESlJqQlF4c0U9LS1QNnFGOWdWOFoybnBoRmdrNk5nNXJRPT0=--3bb6fceb2f4fa2093bf06db79b8d974eaf6469a7"
-  },
-  {
-    "domain": ".wolt.com",
-    "expirationDate": 1789892369.789966,
-    "hostOnly": false,
-    "httpOnly": false,
-    "name": "lastRskxRun",
-    "path": "/",
-    "sameSite": "unspecified",
-    "secure": false,
-    "session": false,
-    "storeId": "0",
-    "value": "1755332369788"
-  },
-  {
     "domain": "wolt.com",
-    "expirationDate": 1786871834,
+    "expirationDate": 1786877055,
     "hostOnly": true,
     "httpOnly": false,
     "name": "__wtoken",
@@ -256,11 +204,11 @@
     "secure": true,
     "session": false,
     "storeId": "0",
-    "value": "{%22accessToken%22:%22eyJhbGciOiJFUzI1NiIsImtpZCI6IjY4OGUxYjViMDAwMDAwMDAwMDAwMDAwMCIsInR5cCI6IngudXNlcitqd3QifQ.eyJhdWQiOlsic3VwcG9ydC1mdW5uZWwiLCJkYWFzLXB1YmxpYy1hcGkiLCJvcmRlci14cCIsInBheW1lbnRzLXRpcHMtc2VydmljZSIsImxveWFsdHktcHJvZ3JhbS1hcGkiLCJpbnRlZ3JhdGlvbi1jb25maWctc2VydmljZSIsIndscy1jdXN0b21lci1zZXJ2aWNlIiwibG95YWx0eS1nYXRld2F5IiwiZ2lmdC1jYXJkLXNob3AiLCJwYXltZW50LXNlcnZpY2UiLCJyZXN0YXVyYW50LWFwaSIsImNvdXJpZXJjbGllbnQiLCJ0b3B1cC1zZXJ2aWNlIiwid29sdGF1dGgiLCJhY3Rpdml0eS1odWIiLCJjb25zdW1lci1hc3NvcnRtZW50IiwibWVhbC1iZW5lZml0cy1zZXJ2aWNlIiwiY29udmVyc2Utd2lkZ2V0LWNvbnN1bWVyIiwiY29ycG9yYXRlLXBvcnRhbC1hcGkiLCJ2ZW51ZS1jb250ZW50LWFwaSIsIm9yZGVyLXRyYWNraW5nIiwic3Vic2NyaXB0aW9uLXNlcnZpY2UiLCJhZC1pbnNpZ2h0cyIsImRpZmZ1c2lvbiIsImUtd2FsbGV0LXNlcnZpY2UiLCJ3b2x0LWNvbSIsInJldHVybnMtYXBpIl0sImlzcyI6IndvbHRhdXRoIiwianRpIjoiY2M3Yzc5NDA3YTgxMTFmMGJiZTk2YTMwZWZjMWRlMzgiLCJ1c2VyIjp7ImlkIjoiNWM3NmEyN2M5NjA1ZGMwMDBhOTk4MDgxIiwibmFtZSI6eyJmaXJzdF9uYW1lIjoiXHUwNWQwXHUwNWQzXHUwNWRkIiwibGFzdF9uYW1lIjoiXHUwNWQwXHUwNWQ1XHUwNWU4XHUwNWQwXHUwNWRmIn0sImVtYWlsIjoiYWRhbXVyYW4xMEBnbWFpbC5jb20iLCJyb2xlcyI6WyJ1c2VyIl0sImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaG9uZV9udW1iZXJfdmVyaWZpZWQiOnRydWUsImNvdW50cnkiOiJJU1IiLCJwZWRyZWdhbF9pZCI6IjI2ZDA4ZWU3LTliODUtNDZkNC1hYzZmLTcwNjc1N2YxMjNkNyIsImxhbmd1YWdlIjoiaGUiLCJwcm9maWxlX3BpY3R1cmUiOnsidXJsIjoiaHR0cHM6Ly9wcm9maWxlLWF2YXRhci1jZG4ud29sdC5jb20vcy9WSU9RZ0swWlM1UEI1UXJaNlNyNFNkczhQVnJWdHE3NmNWUTJhQTBiaVVnLyVENyU5MCVENyU5MC9CIn0sInBlcm1pc3Npb25zIjpbXSwicGhvbmVfbnVtYmVyIjoiKzk3MjU0NDYxMjI0NiIsInRlbmFudCI6IndvbHQifSwiaWF0IjoxNzU1MzM1ODM0LCJleHAiOjE3NTUzMzc2MzQsImFtciI6W119.4C-Gxw7qTeYt-B-oj3IOmBBEtJ1MWej_3W3meyVlzgGcsEsdlE5AxUAqQyoTEp1J93YDDK_zThC-mU7PI8SKlw%22%2C%22expirationTime%22:1755337634000}"
+    "value": "{%22accessToken%22:%22eyJhbGciOiJFUzI1NiIsImtpZCI6IjY4OGUxYjViMDAwMDAwMDAwMDAwMDAwMCIsInR5cCI6IngudXNlcitqd3QifQ.eyJhdWQiOlsic3Vic2NyaXB0aW9uLXNlcnZpY2UiLCJ0b3B1cC1zZXJ2aWNlIiwibG95YWx0eS1nYXRld2F5Iiwic3VwcG9ydC1mdW5uZWwiLCJlLXdhbGxldC1zZXJ2aWNlIiwicmVzdGF1cmFudC1hcGkiLCJkaWZmdXNpb24iLCJwYXltZW50cy10aXBzLXNlcnZpY2UiLCJjb25zdW1lci1hc3NvcnRtZW50IiwicmV0dXJucy1hcGkiLCJnaWZ0LWNhcmQtc2hvcCIsIndscy1jdXN0b21lci1zZXJ2aWNlIiwiYWQtaW5zaWdodHMiLCJ3b2x0YXV0aCIsImRhYXMtcHVibGljLWFwaSIsImNvcnBvcmF0ZS1wb3J0YWwtYXBpIiwiY291cmllcmNsaWVudCIsIm9yZGVyLXRyYWNraW5nIiwidmVudWUtY29udGVudC1hcGkiLCJwYXltZW50LXNlcnZpY2UiLCJvcmRlci14cCIsImNvbnZlcnNlLXdpZGdldC1jb25zdW1lciIsImludGVncmF0aW9uLWNvbmZpZy1zZXJ2aWNlIiwid29sdC1jb20iLCJtZWFsLWJlbmVmaXRzLXNlcnZpY2UiLCJsb3lhbHR5LXByb2dyYW0tYXBpIiwiYWN0aXZpdHktaHViIl0sImlzcyI6IndvbHRhdXRoIiwianRpIjoiZjQ4N2U0MDQ3YThkMTFmMGJmMjRlYWRlNzBhNmJkMDUiLCJ1c2VyIjp7ImlkIjoiNWM3NmEyN2M5NjA1ZGMwMDBhOTk4MDgxIiwibmFtZSI6eyJmaXJzdF9uYW1lIjoiXHUwNWQwXHUwNWQzXHUwNWRkIiwibGFzdF9uYW1lIjoiXHUwNWQwXHUwNWQ1XHUwNWU4XHUwNWQwXHUwNWRmIn0sImVtYWlsIjoiYWRhbXVyYW4xMEBnbWFpbC5jb20iLCJyb2xlcyI6WyJ1c2VyIl0sImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaG9uZV9udW1iZXJfdmVyaWZpZWQiOnRydWUsImNvdW50cnkiOiJJU1IiLCJwZWRyZWdhbF9pZCI6IjI2ZDA4ZWU3LTliODUtNDZkNC1hYzZmLTcwNjc1N2YxMjNkNyIsImxhbmd1YWdlIjoiaGUiLCJwcm9maWxlX3BpY3R1cmUiOnsidXJsIjoiaHR0cHM6Ly9wcm9maWxlLWF2YXRhci1jZG4ud29sdC5jb20vcy9WSU9RZ0swWlM1UEI1UXJaNlNyNFNkczhQVnJWdHE3NmNWUTJhQTBiaVVnLyVENyU5MCVENyU5MC9CIn0sInBlcm1pc3Npb25zIjpbXSwicGhvbmVfbnVtYmVyIjoiKzk3MjU0NDYxMjI0NiIsInRlbmFudCI6IndvbHQifSwiaWF0IjoxNzU1MzQxMDU2LCJleHAiOjE3NTUzNDI4NTYsImFtciI6W119.OJdZbso_tpEYq5hM4piqNOntJyuC3Ze9yru5QVGQsstb70GeivKpA86d91Vz5ZI-xV__ziyX62g42IKtDXJ9bA%22%2C%22expirationTime%22:1755342855000}"
   },
   {
     "domain": "wolt.com",
-    "expirationDate": 1786871834,
+    "expirationDate": 1786877055,
     "hostOnly": true,
     "httpOnly": false,
     "name": "__wrtoken",
@@ -269,11 +217,24 @@
     "secure": true,
     "session": false,
     "storeId": "0",
-    "value": "%22oEyav71zky8UBzghR3--QXyA5lYJhULRRDJGfwJcRp9mPmI%22"
+    "value": "%22oGD_SRk-bnEONYtcCsLOuswQmMdSOqZUZOyb_xtpRU0Z_dU%22"
+  },
+  {
+    "domain": ".wolt.com",
+    "expirationDate": 1755343675,
+    "hostOnly": false,
+    "httpOnly": false,
+    "name": "__woltAnalyticsId",
+    "path": "/",
+    "sameSite": "unspecified",
+    "secure": true,
+    "session": false,
+    "storeId": "0",
+    "value": "39b95499-b8e9-4a36-957e-2209bcd9eccd"
   },
   {
     "domain": "wolt.com",
-    "expirationDate": 1755337019.258005,
+    "expirationDate": 1755342176.697491,
     "hostOnly": true,
     "httpOnly": false,
     "name": "__woltLonLat",
@@ -286,20 +247,59 @@
   },
   {
     "domain": ".wolt.com",
-    "expirationDate": 1755423120,
+    "expirationDate": 1755428280,
     "hostOnly": false,
     "httpOnly": false,
-    "name": "_clsk",
+    "name": "_uetsid",
     "path": "/",
     "sameSite": "unspecified",
     "secure": false,
     "session": false,
     "storeId": "0",
-    "value": "yjlzmg%7C1755336720154%7C4%7C1%7Cf.clarity.ms%2Fcollect"
+    "value": "98aebc3079b811f0a1772b7809174522"
   },
   {
     "domain": ".wolt.com",
-    "expirationDate": 1789896721.376833,
+    "expirationDate": 1789037880,
+    "hostOnly": false,
+    "httpOnly": false,
+    "name": "_uetvid",
+    "path": "/",
+    "sameSite": "unspecified",
+    "secure": false,
+    "session": false,
+    "storeId": "0",
+    "value": "b1e18bf0f5c711ef93dddbe07c48aed1"
+  },
+  {
+    "domain": ".wolt.com",
+    "expirationDate": 1755946680,
+    "hostOnly": false,
+    "httpOnly": false,
+    "name": "intercom-session-qwum5ehb",
+    "path": "/",
+    "sameSite": "lax",
+    "secure": false,
+    "session": false,
+    "storeId": "0",
+    "value": "WUttWmVqZGRlZkk3N2ZxVXFCSndWWFVraTZJODdERHZmMFZadS9lNE03OGVqb3VOODFnVzlUN2JLaW8wcjhXTXltTlgyR1ZKMDJpRitlOVZRTUFRS3hHbXUvTkZKaEZEaXRpUFJldVFkV0U9LS1ZbzAxZTRPVytUTHFJa1FEWEdZR01RPT0=--aded288b296949d16bfe15a27981b6e1977b0b82"
+  },
+  {
+    "domain": ".wolt.com",
+    "expirationDate": 1789901884.775399,
+    "hostOnly": false,
+    "httpOnly": false,
+    "name": "lastRskxRun",
+    "path": "/",
+    "sameSite": "unspecified",
+    "secure": false,
+    "session": false,
+    "storeId": "0",
+    "value": "1755341884772"
+  },
+  {
+    "domain": ".wolt.com",
+    "expirationDate": 1789901885.25273,
     "hostOnly": false,
     "httpOnly": false,
     "name": "_ga_CP7Z2F7NFM",
@@ -308,6 +308,19 @@
     "secure": false,
     "session": false,
     "storeId": "0",
-    "value": "GS2.1.s1755334834$o10$g1$t1755336721$j60$l0$h0"
+    "value": "GS2.1.s1755341873$o11$g1$t1755341885$j48$l0$h0"
+  },
+  {
+    "domain": ".wolt.com",
+    "expirationDate": 1755428285,
+    "hostOnly": false,
+    "httpOnly": false,
+    "name": "_clsk",
+    "path": "/",
+    "sameSite": "unspecified",
+    "secure": false,
+    "session": false,
+    "storeId": "0",
+    "value": "1f6tf1f%7C1755341885685%7C1%7C1%7Cf.clarity.ms%2Fcollect"
   }
 ]
