@@ -19,10 +19,11 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Install Playwright browsers
-        run: sudo npx playwright install --with-deps
+      - name: Install WebKit + deps (exactly for this project’s Playwright)
+        run: |
+          npx playwright install --with-deps web
       
       - name: Run Playwright tests
         run: npm run dev
