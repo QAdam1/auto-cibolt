@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "dotenv -e .env -- tsx src/index.ts",
     "start": "node out/index.js",
-    "ci": "sudo npm run setup && sudo npm run setup:deps && npm run dev",
-    "setup": "sudo npx playwright install",
-    "setup:deps": "sudo npx playwright install --with-deps"
-  },
+    "ci": "npm run setup:deps && npm run dev",
+    "setup": "npx --no-install playwright install webkit",
+    "setup:deps": "if command -v apt-get >/dev/null 2>&1; then sudo npx --no-install playwright install --with-deps webkit; else npx --no-install playwright install webkit; fi"
+  }
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/QAdam1/auto-cibolt.git"
