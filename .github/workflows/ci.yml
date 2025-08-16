@@ -1,12 +1,11 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
   release:
     types: [published]
+  workflow_dispatch: # Manual trigger only
 
 env:
   NODE_VERSION: '18'
