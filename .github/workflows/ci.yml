@@ -6,6 +6,7 @@ on:
   release:
     types: [published]
   workflow_dispatch: # Manual trigger only
+  repository_dispatch: # Webhook trigger via Pipedream
 
 env:
   NODE_VERSION: '18'
