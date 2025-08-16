@@ -7,7 +7,8 @@
     "dev": "dotenv -e .env -- tsx src/index.ts",
     "start": "node out/index.js",
     "ci": "npx playwright install webkit && npm run dev",
-    "setup": "npx playwright install  && npx playwright install --with-deps"
+    "setup": "npx playwright install",
+    "steup:deps": "npx playwright install --with-deps"
   },
   "repository": {
     "type": "git",
