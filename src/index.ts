@@ -17,10 +17,10 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 const setup = async (browserType: BrowserType, options: { copyCookies: boolean }) => {
     let browser: Browser;
     if (options.copyCookies === true) {
-        browser = await browserType.launch({headless: false});
+        browser = await browserType.launch({headless: true});
     } else {
         // browser = await browserType.launch({headless: true});
-        browser = await browserType.launch({headless: false});
+        browser = await browserType.launch({headless: true});
     }
     const context = await browser.newContext();
     const page = await context.newPage();
