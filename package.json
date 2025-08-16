@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsc && node -r dotenv/config out/index.js",
     "start": "node out/index.js",
-    "ci": "npx playwright install webkit && npm run dev"
+    "ci": "npx playwright install webkit && npm run dev",
+    "setup": "npx playwright install webkit"
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,7 @@
     "mailparser": "^3.7.4",
     "nodemailer": "^6.9.1",
     "pdf-parse": "^1.1.1",
-    "playwright": "^1.51.1",
+    "playwright": "1.51.1",
     "puppeteer": "^19.7.5",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"

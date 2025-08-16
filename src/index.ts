@@ -29,9 +29,6 @@ const scrapeWolt = async (): Promise<void> => {
         });
         console.log('Page loaded successfully');
 
-        await page.screenshot({ path: `screenshots/redeemCode/1.png` });
-
-
         // Debug page content
         const pageContent = await page.content();
         console.log('Page title:', await page.title());
