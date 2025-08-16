@@ -22,7 +22,11 @@ jobs:
         run: npm ci
 
       - name: Install WebKit 2140
-        run: sudo npx --no-install playwright install --with-deps webkit
+        run: |
+          # install browser using the local Playwright
+          npx --no-install playwright install webkit
+          # then install system dependencies as root
+          sudo npx --no-install playwright install-deps
       
       - name: Run Playwright tests
         run: npm run dev
