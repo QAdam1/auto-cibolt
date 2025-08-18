@@ -63,7 +63,7 @@ const scrapeWolt = async (): Promise<void> => {
     let browser: Browser | null = null;
     let page: Page | null = null;
     try {
-        ({browser, page} = await setup(chromium, {copyCookies: false}));
+        ({browser, page} = await setup(webkit, {copyCookies: false}));
 
         // Debug page content
         const pageContent = await page.content();
