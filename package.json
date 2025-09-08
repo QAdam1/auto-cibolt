@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "dotenv -e .env -- tsx src/index.ts",
+    "devi": "dotenv -e .env -- tsx src/indexi.ts",
     "start": "node out/index.js",
     "ci": "npm run setup:deps && npm run dev",
     "setup": "npx --no-install playwright install webkit"
