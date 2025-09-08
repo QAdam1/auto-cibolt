@@ -123,9 +123,11 @@ const scrapeWolt = async (): Promise<void> => {
 
         try {
             console.log('Looking for 25 NIS gift card...');
-            // Try multiple selectors for the gift card
-            const giftCard25 = await page.waitForSelector(`xpath=(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text1}')]/ancestor::*[@data-test-id="horizontal-item-card"]//*[@data-test-id="ItemCardStepperContainer"]/*/*)[last()]`, {timeout: 10000})
-                .catch(() => page.waitForSelector(`button:has-text("${text1}")`, {timeout: 10000}));
+            // Improved selector strategy with better fallbacks
+            const giftCard25 = await page.waitForSelector(`[data-test-id="horizontal-item-card"]:has([data-test-id="horizontal-item-card-header"]:has-text("${text1}")) [data-test-id="ItemCardStepperContainer"] button[data-test-id*="stepper-increment"]`, {timeout: 10000})
+                .catch(() => page.waitForSelector(`[data-test-id="horizontal-item-card"]:has-text("${text1}") [data-test-id="ItemCardStepperContainer"] button:last-of-type`, {timeout: 10000}))
+                .catch(() => page.waitForSelector(`[data-test-id="horizontal-item-card"]:has-text("${text1}") button[aria-label*="הוסף"]`, {timeout: 10000}))
+                .catch(() => page.waitForSelector(`[data-test-id="horizontal-item-card"]:has-text("${text1}") button:has-text("+")`, {timeout: 10000}));
 
             if (!giftCard25) {
                 throw new Error('Could not find 25 NIS gift card');
@@ -138,8 +140,10 @@ const scrapeWolt = async (): Promise<void> => {
             await page.screenshot({path: 'screenshots/after-first-gift-card.png'});
 
             console.log('Looking for 30 NIS gift card...');
-            const giftCard30 = await page.waitForSelector(`xpath=(//*[@data-test-id="horizontal-item-card-header" and contains(text(), '${text2}')]/ancestor::*[@data-test-id="horizontal-item-card"]//*[@data-test-id="ItemCardStepperContainer"]/*/*)[last()]`, {timeout: 10000})
-                .catch(() => page.waitForSelector(`button:has-text("${text2}")`, {timeout: 10000}));
+            const giftCard30 = await page.waitForSelector(`[data-test-id="horizontal-item-card"]:has([data-test-id="horizontal-item-card-header"]:has-text("${text2}")) [data-test-id="ItemCardStepperContainer"] button[data-test-id*="stepper-increment"]`, {timeout: 10000})
+                .catch(() => page.waitForSelector(`[data-test-id="horizontal-item-card"]:has-text("${text2}") [data-test-id="ItemCardStepperContainer"] button:last-of-type`, {timeout: 10000}))
+                .catch(() => page.waitForSelector(`[data-test-id="horizontal-item-card"]:has-text("${text2}") button[aria-label*="הוסף"]`, {timeout: 10000}))
+                .catch(() => page.waitForSelector(`[data-test-id="horizontal-item-card"]:has-text("${text2}") button:has-text("+")`, {timeout: 10000}));
 
             if (!giftCard30) {
                 throw new Error('Could not find 30 NIS gift card');
